@@ -1,12 +1,15 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from jose import JWTError, jwt
+
 from fastapi import HTTPException, status
+from jose import jwt
 from sqlalchemy.orm import Session
-from repositories.user_repository import UserRepository
-from schemas.user import UserCreate, UserInDB
-from utils.security import verify_password, get_password_hash
+
 from models.user import User
+from repositories.user_repository import UserRepository
+from schemas.user import UserCreate
+from utils.security import get_password_hash, verify_password
+
 
 class AuthService:
     def __init__(self, db: Session):
@@ -21,14 +24,12 @@ class AuthService:
         return user
 
     def register_user(self, user_data: UserCreate) -> User:
-        # Check if user exists
         if self.user_repository.get_by_email(user_data.email):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Email already registered"
             )
-        
-        # Create new user
+
         hashed_password = get_password_hash(user_data.password)
         return self.user_repository.create(user_data, hashed_password)
 
@@ -38,12 +39,8 @@ class AuthService:
         expires_delta: Optional[timedelta] = None
     ) -> str:
         to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.utcnow() + expires_delta
-        else:
-            expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + (expires_delta if expires_delta else timedelta(minutes=15))
         to_encode.update({"exp": expire})
-        
-        from utils.security import SECRET_KEY, ALGORITHM
-        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-        return encoded_jwt 
+
+        from utils.security import ALGORITHM, SECRET_KEY
+        return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

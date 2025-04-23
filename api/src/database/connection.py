@@ -1,8 +1,10 @@
+import os
+from typing import Generator
+
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import os
-from dotenv import load_dotenv
+from sqlalchemy.orm import Session, sessionmaker
 
 # Load environment variables
 load_dotenv()
@@ -21,7 +23,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # Create base class for models
 Base = declarative_base()
 
-def get_db():
+def get_db() -> Generator[Session, None, None]:
     """Dependency to get DB session"""
     db = SessionLocal()
     try:
@@ -29,10 +31,9 @@ def get_db():
     finally:
         db.close()
 
-def init_db():
+def init_db() -> None:
     """Initialize database tables"""
-    from models.user import User  # Import here to avoid circular imports
-    
+
     print("\nCreating database tables...")
     Base.metadata.create_all(bind=engine)
-    print("✅ Database tables created successfully!") 
+    print("✅ Database tables created successfully!")

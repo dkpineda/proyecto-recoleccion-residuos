@@ -1,0 +1,72 @@
+# Maximum allowed line length
+line-length = 120
+
+[lint]
+# Selected rule families
+select = [
+  "F",    # Pyflakes
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "C90",  # McCabe complexity
+  "I",    # isort
+  "N",    # pep8-naming
+  "UP",   # pyupgrade
+  "YTT",  # flake8-2020
+  "ANN",  # flake8-annotations
+  "B",    # flake8-bugbear
+  "A",    # flake8-builtins
+  "COM",  # flake8-commas
+  "C4",   # flake8-comprehensions
+  "DTZ",  # flake8-datetimez
+  "ISC",  # flake8-implicit-str-concat
+  "ICN",  # flake8-import-conventions
+  "INP",  # flake8-no-pep420
+  "PIE",  # flake8-pie
+  "PT",   # flake8-pytest-style
+  "RET",  # flake8-return
+  "SIM",  # flake8-simplify
+  "TID",  # flake8-tidy-imports
+  "ARG",  # flake8-unused-arguments
+  "PLC",  # Pylint Convention
+  "PLE",  # Pylint Error
+  "PLR",  # Pylint Refactor
+  "PLW",  # Pylint Warning
+  "RUF",  # Ruff-specific rules
+]
+
+# Ignored rules
+ignore = [
+  "D105",    # Missing docstring in magic method
+  "D107",    # Missing docstring in __init__
+  "D203",    # 1 blank line required before class docstring
+  "D212",    # Multi-line docstring summary should start at the first line
+  "UP006",   # Use `list` instead of `List` for type annotations
+  "UP007",   # Use `X | Y` for type annotations instead of `Union[X, Y]`
+  "ANN101",  # Missing type annotation for self in method
+  "ANN102",  # Missing type annotation for cls in classmethod
+  "D400",    # First line should end with a period
+  "D406",    # Section name should end with a newline
+  "D407",    # Missing dashed underline after section
+  "PLC1901", # Compare to empty string using `is not`
+  "UP035",   # `typing.List` is deprecated, use `list`
+  "COM812",  # Missing trailing comma in Python 3.6+
+  "D",       # All docstring-related rules
+  "INP001",  # File is part of an implicit namespace package
+  "ANN204"   # Missing return type annotation for special method
+]
+
+# Rules that should never be automatically fixed
+unfixable = [
+  "F401",  # Unused imports
+  "F841"   # Unused variables
+]
+
+# Per-file rule ignores
+[lint.per-file-ignores]
+"test_*.py" = [
+  "ANN001",  # Missing type annotation for function argument
+  "ANN002",  # Missing type annotation for *args
+  "ANN003",  # Missing type annotation for **kwargs
+  "D101",    # Missing docstring in public class
+  "D103"     # Missing docstring in public function
+]

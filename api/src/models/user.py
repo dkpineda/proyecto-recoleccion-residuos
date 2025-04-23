@@ -1,7 +1,10 @@
+import uuid
+
 from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
-import uuid
+
 from database.connection import Base
+
 
 class User(Base):
     __tablename__ = "users"
@@ -13,4 +16,4 @@ class User(Base):
     lastname = Column(String)
 
     def __repr__(self):
-        return f"<User {self.email}>" 
+        return f"<User {self.email}>"

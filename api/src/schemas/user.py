@@ -1,6 +1,8 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
 import uuid
+from typing import Optional
+
+from pydantic import BaseModel, EmailStr
+
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -26,4 +28,8 @@ class UserInDB(BaseModel):
     lastname: Optional[str] = None
 
     class Config:
-        from_attributes = True 
+        from_attributes = True
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str

@@ -1,9 +1,11 @@
+from typing import Dict
+
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-from database.db import engine
 
-from api.endpoints import auth, users
+from controllers.auth_controller import router as auth_router
+from database.connection import init_db
 
 app = FastAPI(title="Waste Collection API")
 
@@ -15,30 +17,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/auth", tags=["authentication"])
-app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(auth_router, prefix="/auth", tags=["authentication"])
 
 @app.get("/")
-def read_root():
+def read_root() -> Dict[str, str]:
     return {"message": "Welcome to the Waste Collection API"}
 
-@app.get("/health-check")
-async def health_check():
-    db_status = 'connected'
-    try:
-        # Try to connect to the database
-        with engine.connect():
-            pass
-    except Exception as e:
-        db_status = f'disconnected: {str(e)}'
-    
-    return {
-        'status': 'healthy',
-        'message': 'Server is running',
-        'database': db_status
-    }
+@app.on_event("startup")
+async def startup_event() -> None:
+    init_db()
 
 if __name__ == "__main__":
     port = 5000
-    print(f"\nServer running on port {port}\n")
+    print(f"\nServer running on http://127.0.0.1:{port}\n")
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)

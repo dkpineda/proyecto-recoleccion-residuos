@@ -1,8 +1,11 @@
+import uuid
+from typing import Optional
+
 from sqlalchemy.orm import Session
+
 from models.user import User
 from schemas.user import UserCreate
-from typing import Optional
-import uuid
+
 
 class UserRepository:
     def __init__(self, db: Session):
@@ -33,4 +36,4 @@ class UserRepository:
 
     def delete(self, user: User) -> None:
         self.db.delete(user)
-        self.db.commit() 
+        self.db.commit()
