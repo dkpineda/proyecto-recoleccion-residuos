@@ -1,15 +1,33 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from typing import Dict
 
-app = Flask(__name__)
-CORS(app)
+import uvicorn
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-@app.route('/health-check', methods=['GET'])
-def health_check():
-    return jsonify({
-        'status': 'healthy',
-        'message': 'Server is running'
-    })
+from controllers.auth_controller import router as auth_router
+from database.connection import init_db
 
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+app = FastAPI(title="Waste Collection API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(auth_router, prefix="/auth", tags=["authentication"])
+
+@app.get("/")
+def read_root() -> Dict[str, str]:
+    return {"message": "Welcome to the Waste Collection API"}
+
+@app.on_event("startup")
+async def startup_event() -> None:
+    init_db()
+
+if __name__ == "__main__":
+    port = 5000
+    print(f"\nServer running on http://127.0.0.1:{port}\n")
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=True)
