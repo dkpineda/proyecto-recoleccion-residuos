@@ -42,9 +42,20 @@ pip install -r requirements.txt
 4. Configure environment variables:
 Create a `.env` file in the project root with:
 ```env
+# Database connection URL
 CONNECTION_URL=postgresql://user:password@localhost:5432/db_name
-JWT_SECRET=your_jwt_secret
+
+# JWT Secret key for authentication
+SECRET_KEY=your_jwt_secret
+
+# Server configuration
+HOST=localhost        # Server host
+PORT=5000            # Server port
+DEBUG=True           # Debug mode (True/False)
+
 ```
+
+Make sure to replace all placeholder values with your actual configuration values. Keep this file secure and never commit it to version control.
 
 5. Start the server:
 ```bash
@@ -88,18 +99,6 @@ api/
 - CORS enabled
 - Automatic documentation with Swagger UI (available at /docs)
 - Hot reload during development
-
-## Development
-
-To run the server in development mode:
-```bash
-uvicorn src.app:app --reload --port 5000
-```
-
-## API Documentation
-Interactive API documentation is available at:
-- Swagger UI: http://localhost:5000/docs
-- ReDoc: http://localhost:5000/redoc
 
 ## Contributing
 1. Fork the repository

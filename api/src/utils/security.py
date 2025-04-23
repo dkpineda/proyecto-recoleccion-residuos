@@ -18,7 +18,14 @@ if not SECRET_KEY:
         "You can generate one using: python -c 'import secrets; print(secrets.token_urlsafe(64))'"
     )
 
-ALGORITHM = "HS256"
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
+if not ALGORITHM:
+    raise ValueError(
+        "No ALGORITHM set in environment. "
+        "Please set it with a secure algorithm. "
+        "You can use 'HS256', 'HS384', or 'HS512'."
+    )
+
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "30"))
 
 # Password hashing
