@@ -1,21 +1,33 @@
+import { Button, Input } from "@/libs/components";
+import { useSignIn } from "@/libs/data-access/auth/useSignIn";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { useState } from "react";
-import { Button, Input } from "@/libs/components";
+import { Link } from "react-router-dom";
 
 export const SignInForm: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
+  const signIn = useSignIn();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      await signIn.mutateAsync({ username, password });
+      alert("Signed in successfully");
+    } catch (error) {
+      console.error("Error signing in:", error);
+    }
+  };
+
   return (
     <React.Fragment>
       <h2 className="text-2xl font-inter leading-2xl font-bold text-primary">Login</h2>
-      <form className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-col gap-2">
-          <Input
-            label="Email"
-            id="email"
-            type="email"
-            className="border bg-white"
-          />
+          <Input label="Email" id="email" name="email" type="email" className="border bg-white" />
         </div>
 
         <div className="flex flex-col gap-2">
@@ -24,19 +36,20 @@ export const SignInForm: React.FC = () => {
               <Input
                 label="Password"
                 id="password"
+                name="password"
                 className="border bg-white"
                 type={showPassword ? "text" : "password"}
               />
-            <button
-              className="pl-2 absolute right-4 top-1/2 transform -translate-y-1/2"
-              type="button"
-              onClick={() => {
-                setShowPassword(!showPassword);
-              }}
-            >
-              {showPassword ? (
-                <EyeOffIcon className="size-5 text-black" />
-              ) : (
+              <button
+                className="pl-2 absolute right-4 top-1/2 transform -translate-y-1/2"
+                type="button"
+                onClick={() => {
+                  setShowPassword(!showPassword);
+                }}
+              >
+                {showPassword ? (
+                  <EyeOffIcon className="size-5 text-black" />
+                ) : (
                   <EyeIcon className="size-5 text-black" />
                 )}
               </button>
@@ -44,12 +57,16 @@ export const SignInForm: React.FC = () => {
           </div>
         </div>
 
-        <Button
-          type="submit"
-          className="w-full text-white"
-        >
+        <Button type="submit" className="w-full text-white">
           Continue
         </Button>
+
+        <div className="text-center">
+          <span className="text-gray-600">Don't have an account? </span>
+          <Link to="/signup" className="text-primary hover:text-primary/80 font-semibold">
+            Sign Up
+          </Link>
+        </div>
       </form>
     </React.Fragment>
   );
