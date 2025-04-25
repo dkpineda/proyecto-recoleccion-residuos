@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from controllers.auth_controller import router as auth_router
+from controllers.report_controller import router as report_router
 from database.connection import init_db
 
 app = FastAPI(title="Waste Collection API")
@@ -18,6 +19,7 @@ app.add_middleware(
 )
 
 app.include_router(auth_router, prefix="/auth", tags=["authentication"])
+app.include_router(report_router, prefix="/reports", tags=["reports"])
 
 @app.get("/")
 def read_root() -> Dict[str, str]:
