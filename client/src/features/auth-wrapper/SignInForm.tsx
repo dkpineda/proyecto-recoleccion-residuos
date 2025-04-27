@@ -77,7 +77,6 @@ export const SignInForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Botón */}
         <Button type="submit" className="w-full text-white">
           Continuar
         </Button>
