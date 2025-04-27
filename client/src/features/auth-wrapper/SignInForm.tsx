@@ -1,6 +1,6 @@
-// src/features/auth-wrapper/SignInForm.tsx
+
 import axios from "axios";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Link } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,6 @@ import { APP_ROUTES } from "@/routes/routeTypes";
 export const SignInForm: React.FC = () => {
   const navigate = useNavigate();
 
-  // estados para el form
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -18,24 +17,18 @@ export const SignInForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Llamada a tu endpoint de login
       const { data } = await axios.post("http://localhost:5000/auth/login", {
         username: email,
-        // Cambié a username porque en el backend lo espera así
         password,
       });
-      // Asumo que devuelves { token, user: { firstname, ... } }
       const { token, user } = data;
 
-      // Guarda token y firstname para el dashboard
       localStorage.setItem("token", token);
       localStorage.setItem("firstname", user.firstname);
 
-      // Redirige al dashboard protegido
       navigate(APP_ROUTES.dashboard);
     } catch (err) {
       console.error("Login fallido:", err);
-      // Aquí podrías usar un toast o setear un error en pantalla
     }
   };
 
@@ -43,7 +36,6 @@ export const SignInForm: React.FC = () => {
     <React.Fragment>
       <h2 className="text-2xl font-inter leading-2xl font-bold text-primary">Iniciar Sesión</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Email */}
         <div className="flex flex-col gap-2">
           <Input
             label="Email"
@@ -57,7 +49,6 @@ export const SignInForm: React.FC = () => {
           />
         </div>
 
-        {/* Password */}
         <div className="flex flex-col gap-2">
           <div className="relative">
             <Input
@@ -86,10 +77,16 @@ export const SignInForm: React.FC = () => {
           </div>
         </div>
 
-        {/* Botón */}
         <Button type="submit" className="w-full text-white">
           Continuar
         </Button>
+
+        <div className="text-center">
+          <span className="text-gray-600">Don't have an account? </span>
+          <Link to="/signup" className="text-primary hover:text-primary/80 font-semibold">
+            Sign Up
+          </Link>
+        </div>
       </form>
     </React.Fragment>
   );
