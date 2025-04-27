@@ -1,24 +1,29 @@
 import React from "react";
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import { RouteGuard } from "./RouteGuard";
 import { APP_ROUTES } from "./routeTypes";
 
-import { Auth, SignUp } from "@/pages";
+import MainLayout from "@/layouts/MainLayout";
+import { Auth } from "@/pages";
+import Dashboard from "@/pages/dashboard/Dashboard";
+import Home from "@/pages/home/Home";
+import Reports from "@/pages/reports/Reports";
 
-const RouteGuard: React.FC = () => {
-  return <Outlet />;
-};
+export const AppRoutes: React.FC = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path={APP_ROUTES.auth} element={<Auth />} />
 
-export const AppRoutes: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<RouteGuard />}>
-          <Route path={APP_ROUTES.auth} element={<Auth />} />
-          <Route path={APP_ROUTES.signup} element={<SignUp />} />
+      <Route element={<RouteGuard />}>
+        <Route element={<MainLayout />}>
+          <Route path={APP_ROUTES.dashboard} element={<Dashboard />} />
+          <Route path={APP_ROUTES.reports} element={<Reports />} />
         </Route>
-        <Route path="*" element={<Navigate to={APP_ROUTES.auth} replace />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  </BrowserRouter>
+);

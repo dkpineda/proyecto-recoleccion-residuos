@@ -11,7 +11,7 @@
 1. To install the Node version specified in the `.nvmrc` file, execute:
 
    ```bash
-   nvm install
+   nvm install 20.18.0
    ```
 
    This command automatically installs the required Node.js version.
@@ -19,7 +19,7 @@
 2. To switch to the Node version specified in the `.nvmrc` file, execute:
 
    ```bash
-   nvm use
+   nvm use 20.18.0
    ```
 
 ## Yarn Configuration

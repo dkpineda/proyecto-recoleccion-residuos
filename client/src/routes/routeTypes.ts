@@ -1,6 +1,8 @@
+// src/routes/routeTypes.ts
 export const APP_ROUTES = {
-  //auth
-  auth: "/",
+  auth: "/auth",
+  dashboard: "/dashboard",
+  reports: "/reports",
   signup: "/signup",
 } as const;
 
