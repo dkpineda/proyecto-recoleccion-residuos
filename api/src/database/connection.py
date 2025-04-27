@@ -1,4 +1,4 @@
-import os
+import os 
 from typing import Generator
 
 from dotenv import load_dotenv
@@ -30,6 +30,12 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
+
+
+import models.user
+import models.location
+import models.neighborhood
+import models.report
 
 def init_db() -> None:
     """Initialize database tables"""

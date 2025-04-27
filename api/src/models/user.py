@@ -3,7 +3,8 @@
 import uuid
 from sqlalchemy import Column, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship   # ← importa esto
+
 from database.connection import Base
 
 class User(Base):
@@ -15,8 +16,12 @@ class User(Base):
     firstname = Column(String)
     lastname  = Column(String)
 
-    # 🔗 Relación inversa: apunta a la CLASE Report
-    reports = relationship("Report", back_populates="user")
+    # ← relación inversa: coincide con back_populates="user" en Report
+    reports = relationship(
+        "Report",
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
     def __repr__(self):
         return f"<User {self.email}>"

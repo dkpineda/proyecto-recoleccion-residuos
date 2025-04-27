@@ -1,7 +1,8 @@
+// src/routes/routeTypes.ts
 export const APP_ROUTES = {
-  //auth
-  auth: "/",
-  reports: "/reports", //Reportes
+  auth: "/auth",
+  dashboard: "/dashboard",
+  reports: "/reports",
 } as const;
 
 export type AppRouteKeys = keyof typeof APP_ROUTES;
