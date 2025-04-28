@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, type UseMutationResult } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 
 type CreateUserDto = {
@@ -8,21 +8,34 @@ type CreateUserDto = {
   password: string;
 };
 
-export const useCreateUser = () => {
-  return useMutation({
+type CreateUserResponse = {
+  id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+};
+
+type ErrorResponse = {
+  message: string;
+};
+
+export const useCreateUser = (): UseMutationResult<CreateUserResponse, Error, CreateUserDto> => {
+  return useMutation<CreateUserResponse, Error, CreateUserDto>({
     mutationFn: async (data: CreateUserDto) => {
       try {
-        console.log(data);
-        const response = await axios.post("http://localhost:5000/auth/register", data);
-        console.log(response.data);
+        const response = await axios.post<CreateUserResponse>(
+          "http://localhost:5000/auth/register",
+          data,
+        );
         return response.data;
       } catch (error) {
-        if (error instanceof AxiosError && error.response) {
-          const errorMessage =
-            error.response.data.message || "An error occurred during registration";
-          throw new Error(errorMessage);
+        if (error instanceof AxiosError) {
+          const errorData = error.response?.data as ErrorResponse | undefined;
+          if (errorData?.message && typeof errorData.message === "string") {
+            throw new Error(errorData.message);
+          }
         }
-        throw error;
+        throw new Error("An error occurred during registration");
       }
     },
   });

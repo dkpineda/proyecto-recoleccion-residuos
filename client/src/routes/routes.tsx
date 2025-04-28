@@ -5,7 +5,7 @@ import { RouteGuard } from "./RouteGuard";
 import { APP_ROUTES } from "./routeTypes";
 
 import MainLayout from "@/layouts/MainLayout";
-import { Auth } from "@/pages";
+import { Auth, SignUp } from "@/pages";
 import Dashboard from "@/pages/dashboard/Dashboard";
 import Home from "@/pages/home/Home";
 import Reports from "@/pages/reports/Reports";
@@ -14,6 +14,7 @@ export const AppRoutes: React.FC = () => (
   <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path={APP_ROUTES.signup} element={<SignUp />} />
       <Route path={APP_ROUTES.auth} element={<Auth />} />
 
       <Route element={<RouteGuard />}>
