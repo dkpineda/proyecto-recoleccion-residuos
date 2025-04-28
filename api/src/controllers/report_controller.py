@@ -1,4 +1,3 @@
-# controllers/report_controller.py
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 from services.report_service import get_report
@@ -15,7 +14,7 @@ router = APIRouter()
 @router.get("/")
 def get_reports(
     user_id: Optional[str] = Query(None),
-    waste_type: Optional[str] = Query(None),
+    id_waste_type: Optional[int] = Query(None),
     date_star: Optional[datetime] = Query(None),
     date_end: Optional[datetime] = Query(None),
     neighborhood_id: Optional[str] = Query(None),
@@ -24,12 +23,12 @@ def get_reports(
     # Sólo parseamos si hay valor
     ds = datetime.fromisoformat(date_star) if date_star else None
     de = datetime.fromisoformat(date_end)   if date_end   else None
-    return get_report(db, user_id, waste_type, ds, de, neighborhood_id)
+    return get_report(db, user_id, id_waste_type, ds, de, neighborhood_id)
 
 @router.get("/export/excel")
 def export_reports_excel(
     user_id: Optional[str] = Query(None),
-    waste_type: Optional[str] = Query(None),
+    id_waste_type: Optional[int] = Query(None),
     date_star: Optional[datetime] = Query(None),
     date_end: Optional[datetime] = Query(None),
     neighborhood_id: Optional[str] = Query(None),
@@ -43,7 +42,7 @@ def export_reports_excel(
     from fastapi.responses import StreamingResponse
 
     # 1) Traemos los reportes como ORM
-    reports = get_report(db, user_id, waste_type, ds, de, neighborhood_id)
+    reports = get_report(db, user_id, id_waste_type, ds, de, neighborhood_id)
 
     # 2) Convertimos a lista de diccionarios
     rows = []
@@ -51,8 +50,9 @@ def export_reports_excel(
         rows.append({
             "Fecha":               r.date.isoformat(),
             "Usuario":             f"{r.user.firstname} {r.user.lastname}",
-            "Tipo de Residuo":      r.waste_type,
+            "Tipo de Residuo":      r.waste_type.name,
             "Peso (kg)":            r.weight,
+            "Puntos": r.points,
             "Descripción":         r.description or "",
             "Barrio":              r.neighborhood.name,
             "Localidad":           r.neighborhood.location.name,
@@ -78,7 +78,7 @@ def export_reports_excel(
 @router.get("/export/pdf")
 def export_reports_pdf(
     user_id: Optional[str] = Query(None),
-    waste_type: Optional[str] = Query(None),
+    id_waste_type: Optional[int] = Query(None),
     date_star: Optional[datetime] = Query(None),
     date_end: Optional[datetime] = Query(None),
     neighborhood_id: Optional[str] = Query(None),
@@ -93,7 +93,7 @@ def export_reports_pdf(
     ds = datetime.fromisoformat(date_star) if date_star else None
     de = datetime.fromisoformat(date_end)   if date_end   else None
  # 1) extraemos ORM objects
-    reports = get_report(db, user_id, waste_type, ds, de, neighborhood_id)
+    reports = get_report(db, user_id, id_waste_type, ds, de, neighborhood_id)
 
     # 2) los transformamos en lista de dicts
     rows = []
@@ -101,8 +101,9 @@ def export_reports_pdf(
         rows.append({
             "date":               r.date.isoformat(),
             "user_name":          f"{r.user.firstname} {r.user.lastname}",
-            "waste_type":         r.waste_type,
+            "waste_type":         r.waste_type.name,
             "weight":             r.weight,
+            "points":             r.points,
             "description":        r.description or "",
             "neighborhood_name":  r.neighborhood.name,
             "location_name":      r.neighborhood.location.name,
@@ -110,7 +111,7 @@ def export_reports_pdf(
 
     # 3) Preparamos los datos para ReportLab
     table_data = [[
-       "Fecha", "Usuario", "Tipo", "Peso (kg)",
+       "Fecha", "Usuario", "Tipo", "Peso (kg)", "Puntos",
        "Descripción", "Barrio", "Localidad"
     ]]
     for r in rows:
@@ -119,6 +120,7 @@ def export_reports_pdf(
             r["user_name"],
             r["waste_type"],
             str(r["weight"]),
+            str(r["points"]),
             r["description"],
             r["neighborhood_name"],
             r["location_name"],

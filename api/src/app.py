@@ -8,6 +8,8 @@ from controllers.auth_controller import router as auth_router
 from controllers.report_controller import router as report_router
 from controllers.location_controller import router as location_router
 from controllers.neighborhood_controller import router as neighborhood_router
+from controllers.user_controller import router as user_router
+from controllers.waste_type_controller import router as waste_type_router
 
 from database.connection import init_db
 
@@ -25,7 +27,8 @@ app.include_router(auth_router, prefix="/auth", tags=["authentication"])
 app.include_router(report_router, prefix="/reports", tags=["report"])
 app.include_router(location_router, prefix="/locations", tags=["location"])
 app.include_router(neighborhood_router, prefix="/neighborhoods", tags=["neighborhood"])
-
+app.include_router(user_router, prefix="/users", tags=["user"])
+app.include_router(waste_type_router, prefix="/wastetypes", tags=["waste_type"])
 
 @app.get("/")
 def read_root() -> Dict[str, str]:
