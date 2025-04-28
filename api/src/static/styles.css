@@ -1,0 +1,169 @@
+/* Estilo general */
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  color: #333;
+  margin: 0;
+}
+
+/* Encabezado */
+header {
+  background-color: #2e7d32;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-shadow: 1px 1px 3px #4caf50;
+  position: relative;
+}
+
+.descripcion {
+  background: linear-gradient(135deg, #81c784, #4caf50);
+  color: white;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 1.2em;
+  width: 80%;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Contenedor general */
+.container {
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Formulario mejorado */
+.form-mejorado {
+  background: linear-gradient(135deg, #ffffff, #e8f5e9);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 1s ease-in-out;
+  transition: transform 0.3s;
+}
+
+.form-mejorado:hover {
+  transform: scale(1.02);
+}
+
+.form-mejorado h2 {
+  text-align: center;
+  color: #2e7d32;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.form-group label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+  color: #388e3c;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #66bb6a;
+  outline: none;
+  box-shadow: 0 0 6px rgba(102, 187, 106, 0.5);
+}
+
+textarea {
+  resize: none;
+}
+
+/* Tooltip dinámico */
+.form-group[data-tooltip]:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -25px;
+  left: 10px;
+  background: #2e7d32;
+  color: white;
+  font-size: 0.9em;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Botón mejorado */
+.btn-mejorado {
+  background: linear-gradient(135deg, #2e7d32, #4caf50);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.btn-mejorado:hover {
+  background: linear-gradient(135deg, #66bb6a, #2e7d32);
+  transform: scale(1.05);
+}
+
+/* Historial profesional */
+.historial-fijo {
+  margin-top: 30px;
+  padding: 20px;
+  background: linear-gradient(135deg, #f1f8e9, #ffffff); /* Fondo con ligero degradado */
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+  border: 1px solid #c5e1a5; /* Ligeramente delineado */
+  transition: transform 0.3s, box-shadow 0.3s; /* Suavidad para la interacción */
+}
+
+.historial-fijo h3 {
+  color: #2e7d32;
+  font-weight: bold;
+  text-align: center; /* Título del historial */
+  margin-bottom: 15px;
+}
+
+.historial-fijo ul {
+  list-style-type: none; /* Sin viñetas */
+  padding: 0;
+  margin: 0;
+}
+
+.historial-fijo ul li {
+  background: #e8f5e9; /* Fondo suave */
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #c5e1a5;
+  transition: background 0.3s, transform 0.3s;
+}
+
+.historial-fijo ul li:hover {
+  background: #c8e6c9; /* Fondo más oscuro al pasar el cursor */
+  transform: scale(1.02); /* Sutil escala al interactuar */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Más profundidad */
+}
+
+.historial-fijo p {
+  font-size: 0.9em; /* Subtexto más pequeño */
+  color: #555;
+  margin-top: 5px;
+  text-align: justify; /* Mejor lectura */
+}

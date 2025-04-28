@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recolección de Residuos</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Pantalla de carga -->
+  <div id="loading">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"></circle>
+      <polyline points="12 6 12 12 16 14"></polyline>
+    </svg>
+  </div>
+
+  <header>
+    <h1>Recolección de Residuos</h1>
+    <p class="descripcion">Administra y solicita recolecciones de residuos de manera eficiente. ¡Cuidemos el planeta juntos!</p>
+  </header>
+  
+  <div class="container">
+    <!-- Formulario de solicitud mejorado -->
+    <form id="solicitud-form" class="form-mejorado" data-aos="zoom-in">
+      <h2>🌿 Crear una Solicitud</h2>
+      <div class="form-group" data-tooltip="Ingresa tu correo electrónico">
+        <label for="correo">
+          <i class="fas fa-envelope"></i> Correo electrónico:
+        </label>
+        <input type="email" id="correo" name="correo" placeholder="Ej: ejemplo@correo.com" required>
+      </div>
+      
+      <div class="form-group" data-tooltip="Ingresa tu dirección completa">
+        <label for="direccion">
+          <i class="fas fa-map-marker-alt"></i> Dirección:
+        </label>
+        <input type="text" id="direccion" name="direccion" placeholder="Ej: Calle 123 #45-67" required>
+      </div>
+      
+      <div class="form-group" data-tooltip="Selecciona la fecha de la recolección">
+        <label for="fecha">
+          <i class="fas fa-calendar-alt"></i> Fecha:
+        </label>
+        <input type="date" id="fecha" name="fecha" required>
+      </div>
+      
+      <div class="form-group" data-tooltip="Elige el tipo de residuos">
+        <label for="tipo">
+          <i class="fas fa-recycle"></i> Tipo de recolección:
+        </label>
+        <select id="tipo" name="tipo" required>
+          <option value="orgánico">♻️ Orgánico</option>
+          <option value="inorgánico">🗑️ Inorgánico</option>
+          <option value="peligroso">⚠️ Peligroso</option>
+        </select>
+      </div>
+      
+      <div class="form-group" data-tooltip="Describe los residuos brevemente">
+        <label for="descripcion">
+          <i class="fas fa-pencil-alt"></i> Descripción:
+        </label>
+        <textarea id="descripcion" name="descripcion" rows="4" placeholder="Describe brevemente los residuos..."></textarea>
+      </div>
+      
+      <button type="submit" class="btn-mejorado">
+        Enviar Solicitud
+      </button>
+    </form>
+
+    <!-- Historial de solicitudes -->
+    <div id="historial" class="historial-mejorado">
+      <h2>📜 Historial de Solicitudes</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Correo</th>
+            <th>Dirección</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="solicitudes-body">
+          <tr>
+            <td>001</td>
+            <td>usuario@example.com</td>
+            <td>Calle 123 #45-67</td>
+            <td>2025-04-01</td>
+            <td>Orgánico</td>
+            <td>Pendiente</td>
+            <td>
+              <button class="btn-accion editar"><i class="fas fa-edit"></i></button>
+              <button class="btn-accion eliminar"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>otro@example.com</td>
+            <td>Av. Principal 56</td>
+            <td>2025-04-02</td>
+            <td>Inorgánico</td>
+            <td>Completado</td>
+            <td>
+              <button class="btn-accion editar"><i class="fas fa-edit"></i></button>
+              <button class="btn-accion eliminar"><i class="fas fa-trash-alt"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init({
+      once: true,
+      duration: 800,
+      offset: 200
+    });
+
+    window.onload = function() {
+      document.getElementById("loading").style.display = "none";
+    };
+  </script>
+  <script src="app.js"></script>
+</body>
+</html>
