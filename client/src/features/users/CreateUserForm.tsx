@@ -2,10 +2,27 @@ import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { z } from "zod";
 
 import { Button, Input } from "@/libs/components";
 import { useCreateUser } from "@/libs/data-access/users/useCreateUser";
 import { APP_ROUTES } from "@/routes/routeTypes";
+
+const createUserSchema = z.object({
+  firstname: z.string().min(1, { message: "El nombre es requerido" }),
+  lastname: z.string().min(1, { message: "El apellido es requerido" }),
+  email: z.string().email({ message: "El correo electrónico no es válido" }),
+  password: z
+    .string()
+    .min(8, { message: "La contraseña debe tener al menos 8 caracteres" })
+    .regex(/[A-Z]/, { message: "La contraseña debe contener al menos una letra mayúscula" })
+    .regex(/[a-z]/, { message: "La contraseña debe contener al menos una letra minúscula" })
+    .regex(/[0-9]/, { message: "La contraseña debe contener al menos un número" })
+    .regex(/[^A-Za-z0-9]/, {
+      message: "La contraseña debe contener al menos un carácter especial",
+    }),
+  confirmPassword: z.string().min(8, { message: "La contraseña debe tener al menos 8 caracteres" }),
+});
 
 export const CreateUserForm: React.FC = () => {
   const navigate = useNavigate();
@@ -20,6 +37,13 @@ export const CreateUserForm: React.FC = () => {
     password: "",
     confirmPassword: "",
   });
+  const [formErrors, setFormErrors] = useState<{
+    firstname?: string;
+    lastname?: string;
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -27,36 +51,52 @@ export const CreateUserForm: React.FC = () => {
       ...prev,
       [name]: value,
     }));
+    // Limpiar el error del campo cuando el usuario empiece a escribir
+    setFormErrors((prev) => ({
+      ...prev,
+      [name]: undefined,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const validationResult = createUserSchema.safeParse(formData);
 
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Las contraseñas no coinciden");
+    if (!validationResult.success) {
+      const errors = validationResult.error.flatten().fieldErrors;
+      setFormErrors(errors as typeof formErrors);
       return;
     }
 
-    const userData = {
-      firstname: formData.firstname,
-      lastname: formData.lastname,
-      email: formData.email,
-      password: formData.password,
-    };
+    if (formData.password !== formData.confirmPassword) {
+      setFormErrors((prev) => ({
+        ...prev,
+        confirmPassword: "Las contraseñas no coinciden",
+      }));
+      return;
+    }
 
-    createUser.mutate(userData, {
-      onSuccess: () => {
-        toast.success("¡Usuario creado exitosamente!");
-        void navigate(APP_ROUTES.auth);
+    createUser.mutate(
+      {
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email,
+        password: formData.password,
       },
-      onError: (error) => {
-        const errorMessage =
-          typeof error.message === "string" && error.message !== ""
-            ? error.message
-            : "Error al crear el usuario";
-        toast.error(errorMessage);
+      {
+        onSuccess: () => {
+          toast.success("¡Usuario creado exitosamente!");
+          void navigate(APP_ROUTES.auth);
+        },
+        onError: (error) => {
+          const errorMessage =
+            typeof error.message === "string" && error.message !== ""
+              ? error.message
+              : "Error al crear el usuario";
+          toast.error(errorMessage);
+        },
       },
-    });
+    );
   };
 
   return (
@@ -76,6 +116,7 @@ export const CreateUserForm: React.FC = () => {
               className="w-full border"
               value={formData.firstname}
               onChange={handleChange}
+              error={formErrors.firstname}
               required
             />
           </div>
@@ -89,6 +130,7 @@ export const CreateUserForm: React.FC = () => {
               className="w-full border"
               value={formData.lastname}
               onChange={handleChange}
+              error={formErrors.lastname}
               required
             />
           </div>
@@ -102,6 +144,7 @@ export const CreateUserForm: React.FC = () => {
               className="w-full border"
               value={formData.email}
               onChange={handleChange}
+              error={formErrors.email}
               required
             />
           </div>
@@ -116,6 +159,7 @@ export const CreateUserForm: React.FC = () => {
                 type={showPassword ? "text" : "password"}
                 value={formData.password}
                 onChange={handleChange}
+                error={formErrors.password}
                 required
               />
               <button
@@ -140,6 +184,7 @@ export const CreateUserForm: React.FC = () => {
                 type={showConfirmPassword ? "text" : "password"}
                 value={formData.confirmPassword}
                 onChange={handleChange}
+                error={formErrors.confirmPassword}
                 required
               />
               <button
